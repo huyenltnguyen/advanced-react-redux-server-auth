@@ -1,4 +1,11 @@
+import jwt from 'jwt-simple';
+import config from '../config';
 import User from '../models/user';
+
+const generateTokenForUser = (user) => {
+  const timestamp = new Date().getTime();
+  return jwt.encode({ sub: user.id, iat: timestamp }, config.secret);
+};
 
 export const signupAuth = (req, res, next) => {
   const email = req.body.email;
@@ -32,8 +39,15 @@ export const signupAuth = (req, res, next) => {
       if (err) {
         res.send(err);
       } else {
-        res.json({ message: 'Signup successfully!' });
+        res.json({ token: generateTokenForUser(user) });
       }
     });
   });
+};
+
+export const signinAuth = (req, res, next) => {
+  // User has their email and password auth'd
+  // Give them a token
+
+  res.json({ token: generateTokenForUser(req.user) });
 };

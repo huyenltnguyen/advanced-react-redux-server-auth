@@ -12,7 +12,8 @@ mongoose.connect('mongodb://localhost/auth');
 
 // App setup
 app.use(morgan('combined'));
-app.use(bodyParser.json({ type: '*/*' }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 router(app);
 
 // Server setup
